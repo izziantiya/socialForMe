@@ -1,4 +1,7 @@
-const url = 'https://localhost:8080';
+const url = document.location.protocol + '//' + document.location.host;
+
+
+
 let stompClient;
 let senderId;
 let dialogId = document.querySelector("#dialogId").textContent;
@@ -30,6 +33,7 @@ $.get("/getSender", function (response) {
 });
 
 function connectToChat(senderId) {
+    console.log(url);
     console.log("connecting to chat...")
     let socket = new SockJS(url + '/ws');
     stompClient = Stomp.over(socket);
