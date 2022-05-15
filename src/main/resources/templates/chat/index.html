@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">ForMe</a>
+    <div class="collapse navbar-collapse" id="navbar1">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item "><a class="nav-link" href="/profile">Профиль<span class="sr-only"></span></a></li>
+            <li class="nav-item"><a class="nav-link" href="/">Найти друзей</a></li>
+            <li class="nav-item active"><a class="nav-link" href="/dialogs">Диалоги</a></li>
+            <link rel="stylesheet" href="/css/chat.css">
+        </ul>
+    </div>
+</nav>
+<main class="content" style="margin-top: 20px;">
+    <div class="container p-0">
+
+        <h1 class="h3 mb-3">Диалоги</h1>
+
+        <div class="card col-8">
+            <div class="row g-0">
+                    <a th:each="el : ${map}" th:href="@{dialogs/{id} (id = ${el.key.id})}" class="list-group-item list-group-item-action border-0" >
+                        <div class="d-flex align-items-start" th:each="u : ${el.value}">
+                           <span th:unless="${u.info}"><img src="https://lh3.googleusercontent.com/proxy/2btQo18iNqmFEGdzjNMYcExJ2i496HpT36K1UIW4V0u7MlNQPp7eCq-1JlR_KCeHNjsYdDQc-1TvLNIAqsWjttDV2yOIpKDV78S-RSPj8MhDc3I_cekjd3RztOtdPYczPGL1ThRsBYb97j55raEi4ACIiyIC2Z_ZEFlE-3MKqDmH5BTLIZAp9VQ"
+                                                               alt="Admin" class="rounded-circle" width="60" height="60"></span>
+                            <span th:if="${u.info}"><img th:unless="${u.info.image}" src="https://lh3.googleusercontent.com/proxy/2btQo18iNqmFEGdzjNMYcExJ2i496HpT36K1UIW4V0u7MlNQPp7eCq-1JlR_KCeHNjsYdDQc-1TvLNIAqsWjttDV2yOIpKDV78S-RSPj8MhDc3I_cekjd3RztOtdPYczPGL1ThRsBYb97j55raEi4ACIiyIC2Z_ZEFlE-3MKqDmH5BTLIZAp9VQ"
+                                                            alt="Admin" class="rounded-circle" width="60" height="60"></span>
+                            <span th:if="${u.info}"><img th:if="${u.info.image}" th:src="'/img/' + ${u.info.image}"
+                                                            alt="Admin" class="rounded-circle" width="60" height="60"></span>
+                            <div class="flex-grow-1 ml-4">
+                                <span th:text="${el.key.name}"></span>
+                                <div class="small"><span th:text="${u.getFirstName()} + ' ' + ${u.getLastName()}" class="fas fa-circle chat-online"></span></div>
+                            </div>
+                        </div>
+                    </a>
+                    <hr class="d-block d-lg-none mt-1 mb-0">
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

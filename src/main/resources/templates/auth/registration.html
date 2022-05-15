@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>Signup</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+<div class="container">
+    <div class="card bg-light" style="margin-top: 10rem">
+        <article class="card-body mx-auto" style="max-width: 400px;">
+            <h4 class="card-title mt-3 text-center">Sign in</h4>
+            <form method="post" th:action="@{/registration}" th:object="${user}">
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-address-card"></i></span>
+                    </div>
+                    <input name="username" th:field="*{username}" class="form-control" placeholder="Username" type="text">
+                </div>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                    </div>
+                    <input name="firstName" th:field="*{firstName}" class="form-control" placeholder="First name" type="text">
+                </div>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-angle-double-right"></i></span>
+                    </div>
+                    <input name="lastName" th:field="*{lastName}" class="form-control" placeholder="Last Name" type="text">
+                </div>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                    </div>
+                    <input name="password" class="form-control" placeholder="Password" type="password">
+                </div>
+                <div class="form-group">
+                    <button type="submit" th:field="*{password}" class="btn btn-secondary btn-block">Sign up</button>
+                </div>
+                <div id="success" class="text-success" th:text="${success}"></div>
+                <div th:id="error" class="text-danger" th:text="${error}"></div>
+                <p class="text-center">Have an account? <br> <a href="/login" style="color: #00509D">Sign in</a> </p>
+            </form>
+        </article>
+    </div> <!-- card.// -->
+</div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">ForMe</a>
+    <div class="collapse navbar-collapse" id="navbar1">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/profile">Профиль<span class="sr-only"></span></a></li>
+            <li class="nav-item active"><a class="nav-link" href="/">Найти друзей</a></li>
+            <li class="nav-item"><a class="nav-link" href="dialogs">Диалоги</a></li>
+        </ul>
+    </div>
+</nav>
+
+<script src="https://use.fontawesome.com/c560c025cf.js"></script>
+<div class="container" style="margin-top: 3rem;">
+    <div class="card-body" th:each="usr : ${users}">
+        <div class="row" >
+            <div class="col-xs-2 col-md-2"><a th:href="@{profile/{id} (id = ${usr.id})}">
+                <span th:unless="${usr.info}"><img src="https://www.stregasystem.com/img/users/user.png"
+                                                   alt="Admin" class="rounded-circle" width="80" height="80"></span>
+                <span th:if="${usr.info}"><img th:unless="${usr.info.image}" src="https://www.stregasystem.com/img/users/user.png"
+                                               alt="Admin" class="rounded-circle" width="80" height="80"></span>
+                <span th:if="${usr.info}"><img th:if="${usr.info.image}" th:src="'/img/' + ${usr.info.image}"
+                                                alt="Admin" class="rounded-circle" width="80" height="80"></span>
+            </a>
+            </div>
+            <div class="col-xs-4 col-md-6">
+                <h4 class="product-name"><strong th:text="${usr.username}"></strong></h4><h4>
+                <small th:text="${usr.firstName} + ' ' + ${usr.lastName}"></small></h4>
+            </div>
+            <div class="col-xs-6 col-md-4 row">
+                <div class="col-xs-2 col-md-2">
+                    <a   th:href="@{/profile/{id} (id = ${usr.id})}" class="btn btn-info btn-xs">
+                        Посмотреть профиль
+                    </a>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </div>
+</div>
+</div>
+
+<script src="js/request.js"></script>
+</body>
+</html>

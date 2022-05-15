@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.0/handlebars.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+    <link rel="stylesheet" href="../css/profile.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">ForMe</a>
+    <div class="collapse navbar-collapse" id="navbar1">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item "><a class="nav-link" href="/profile">Профиль<span class="sr-only"></span></a></li>
+            <li class="nav-item"><a class="nav-link" href="/">Найти друзей</a></li>
+            <li class="nav-item active"><a class="nav-link" href="/dialogs">Диалоги</a></li>
+            <link rel="stylesheet" href="/css/chat.css">
+        </ul>
+    </div>
+</nav>
+<main class="content" style="margin-top: 10px;">
+    <div class="container p-0">
+        <div class="card">
+            <div class="row g-0">
+                <div class="col-12">
+                    <div class="py-2 px-4 border-bottom d-none d-lg-block">
+                        <div class="d-flex align-items-center py-1" th:each="r : ${recipient}">
+                            <div class="position-relative">
+                                <span id="recipient" th:text="${r.id}" hidden></span>
+                                <span id="dialogId" th:text="${dialog.id}" hidden></span>
+                               <span th:unless="${r.info}"><img src="https://lh3.googleusercontent.com/proxy/2btQo18iNqmFEGdzjNMYcExJ2i496HpT36K1UIW4V0u7MlNQPp7eCq-1JlR_KCeHNjsYdDQc-1TvLNIAqsWjttDV2yOIpKDV78S-RSPj8MhDc3I_cekjd3RztOtdPYczPGL1ThRsBYb97j55raEi4ACIiyIC2Z_ZEFlE-3MKqDmH5BTLIZAp9VQ"
+                                                                alt="Admin" class="rounded-circle" width="60" height="60"></span>
+                                <span th:if="${r.info}"><img th:unless="${r.info.image}" src="https://lh3.googleusercontent.com/proxy/2btQo18iNqmFEGdzjNMYcExJ2i496HpT36K1UIW4V0u7MlNQPp7eCq-1JlR_KCeHNjsYdDQc-1TvLNIAqsWjttDV2yOIpKDV78S-RSPj8MhDc3I_cekjd3RztOtdPYczPGL1ThRsBYb97j55raEi4ACIiyIC2Z_ZEFlE-3MKqDmH5BTLIZAp9VQ"
+                                                             alt="Admin" class="rounded-circle" width="60" height="60"></span>
+                                <span th:if="${r.info}"><img th:if="${r.info.image}" th:src="'/img/' + ${r.info.image}"
+                                                             alt="Admin" class="rounded-circle" width="60" height="60"></span>
+                            </div>
+                            <div class="flex-grow-1 pl-3">
+                                <strong th:text="${r.username}"></strong>
+                                <div class="text-muted small"><em th:text="${r.firstName} + ' ' + ${r.lastName}"></em></div>
+                            </div>
+                            <div>
+                                <a href="/dialogs" class="btn btn-info btn-lg mr-1 px-3 d-none d-md-inline-block">К диалогам</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="position-relative">
+                        <div class="chat-messages p-4">
+                            <div id="chat"  th:each="msg : ${messages}">
+                            <div th:if="${msg.sender} == ${princip.id}" class="chat-message-right pb-4">
+                                <div>
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
+                                    <div class="text-muted small text-nowrap mt-2" th:text="${msg.time}"></div>
+                                </div>
+                                <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                    <div class="font-weight-bold mb-1">You</div>
+                                    <span th:text="${msg.content}"></span>
+                                </div>
+                            </div>
+
+                            <div class="chat-message-left pb-4" th:unless="${msg.sender} == ${princip.id}">
+                                <div>
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                                    <div class="text-muted small text-nowrap mt-2" th:text="${msg.time}"></div>
+                                </div>
+                                <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                                    <div class="font-weight-bold mb-1" th:text="${recName}"></div>
+                                    <span th:text="${msg.content}"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    </div>
+                    <div class="flex-grow-0 py-3 px-4 border-top">
+                        <div class="input-group">
+                            <textarea type="text" id="message" class="form-control" placeholder="Type your message"></textarea>
+                            <button type="submit" onclick="sendMsg()" class="btn btn-primary">Send</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script id="message-template" type="text/x-handlebars-template">
+    <div class="chat-message-right mb-4">
+        <div>
+            <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
+            <div class="text-muted small text-nowrap mt-2">{{time}}</div>
+        </div>
+        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+            <div class="font-weight-bold mb-1">You</div>
+            {{content}}
+        </div>
+    </div>
+</script>
+
+<script id="message-response-template" type="text/x-handlebars-template">
+    <div class="chat-message-left pb-4">
+        <div>
+            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+            <div class="text-muted small text-nowrap mt-2">{{time}}</div>
+        </div>
+        <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+            <div class="font-weight-bold mb-1">{{name}}</div>
+            {{content}}
+        </div>
+    </div>
+</script>
+
+<script src="../js/chat.js"></script>
+</body>
+</html>
