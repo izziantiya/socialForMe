@@ -104,7 +104,9 @@ public class ProfileController {
         User user = userService.getUser(principal.getName());
         Info info = user.getInfo();
         if (file != null && !file.getOriginalFilename().isEmpty()) {
-            File uploadDir = new File(uploadPath);
+            String dir = System.getProperty("user.dir");
+            System.out.println(dir);
+            File uploadDir = new File(dir + "/" + uploadPath);
             if (!uploadDir.exists()) {
                 uploadDir.mkdir();
             }
@@ -122,7 +124,7 @@ public class ProfileController {
             }
 
 
-            file.transferTo(new File(uploadPath + "/" + resultFile));
+            file.transferTo(new File(dir + "/" +uploadPath + "/" + resultFile));
         }
         return "redirect:/profile";
     }
