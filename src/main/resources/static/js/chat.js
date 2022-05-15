@@ -1,4 +1,4 @@
-const url = 'http://localhost:8080';
+const url = 'https://localhost:8080';
 let stompClient;
 let senderId;
 let dialogId = document.querySelector("#dialogId").textContent;
